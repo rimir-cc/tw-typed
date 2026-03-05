@@ -1,0 +1,107 @@
+created: 20260305110750640
+modified: 20260305110750640
+rdt.order: 4
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: Examples
+title: $:/plugins/rimir/typed/doc/examples
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Define a type with fields
+
+Type tiddler (`typed/types/widget.tid`):
+
+```
+title: $:/plugins/myplugin/typed/types/widget
+rrt.type: type
+key: widget
+caption: Widget
+icon: ⚙️
+parent: _node
+upref: w
+
+\function rrt.fields:1() color size
+```
+
+Field tiddler (`typed/fields/color.tid`):
+
+```
+title: $:/plugins/myplugin/typed/fields/color
+rrt.type: field
+key: color
+caption: Color
+typed: enum:colors
+constraints: !1+
+```
+
+!! Type-specific field override
+
+Base field allows any parent:
+
+```
+title: $:/plugins/myplugin/typed/fields/parent
+rrt.type: field
+key: parent
+typed: _node
+constraints: !1+
+```
+
+Override restricts widgets to only have `dashboard` parents:
+
+```
+title: $:/plugins/myplugin/typed/fields/widget_parent
+rrt.type: field
+key: parent
+typed: dashboard
+constraints: !1+
+validity: widget
+```
+
+!! Define an enum
+
+Base enum:
+
+```
+title: $:/plugins/myplugin/typed/enums/colors
+rrt.type: enum
+key: colors
+caption: Colors
+
+\function rrt.options:0() red green blue
+```
+
+Extended enum (inherits parent options + adds more):
+
+```
+title: $:/plugins/myplugin/typed/enums/ext-colors
+rrt.type: enum
+key: colors
+parent: colors
+
+\function rrt.options:1() yellow purple
+```
+
+Result: the `colors` enum has options `red green blue yellow purple`.
+
+!! Spawner usage
+
+# Open the Spawner tiddler (`$:/plugins/rimir/typed/Spawner`)
+# Select a type from the dropdown — fields load dynamically via `$importvariables`
+# Fill in the required fields (blocking constraints shown in red)
+# The title field auto-computes if the type defines a `$title` + `filter` constraint
+# Click "Create" — the new tiddler is created with all fields set
+
+!! Validator interpretation
+
+Open the Validator (`$:/plugins/rimir/typed/Validator`). For each type:
+
+* ''Red entries'' (`!` prefix constraints): blocking — data must be fixed
+* ''Orange entries'' (no prefix): warnings — recommended but not required
+* Common checks: missing required fields (`!1+`), duplicate abbreviations (`!u`), invalid parent references
+
+</$fill>
+</$transclude>

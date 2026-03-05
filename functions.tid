@@ -1,0 +1,35 @@
+created: 20260305110750643
+modified: 20260305110750643
+title: $:/plugins/rimir/typed/functions
+type: text/vnd.tiddlywiki
+
+\function _locate_rrt(type) [all[shadows+tiddlers]rrt.type<type>]
+
+\function _concat_hack_delim() $$$
+
+\function _locate-type-tiddler(type-key) [function[_locate_rrt],[type]key<type-key>]
+\function _locate-field-tiddler(field-key, type-key) [function[_locate_rrt],[field]key<field-key>]:filter[<currentTiddler>get[validity]enlist-input[]match<type-key>]~[function[_locate_rrt],[field]key<field-key>!has[validity]]
+\function _locate-enum-tiddler(enum-key, type-key) [function[_locate_rrt],[enum]key<enum-key>]
+
+\function _find-available-objects(type-keys) [enlist<type-keys>listed<type-field>]
+\function _calculate_selection(field-tid) [<field-tid>get[constraints]enlist-input[]match[n:1]then[single]]~[[multi]]
+\function _calculated() [<field-tid>get[constraints]]:map[<target-tid>subfilter<currentTiddler>]
+
+\function _get-blocking-min(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]prefix[!]suffix[+]first[]]:map[<currentTiddler>removeprefix[!]removesuffix[+]]
+\function _get-warning-min(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]!prefix[!]suffix[+]first[]]:map[<currentTiddler>removesuffix[+]]
+\function _has-blocking-unique(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]match[!u]]
+\function _has-warning-unique(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]match[u]]
+
+\function _field-value-length(field-key) [<target-tid>get<field-key>length[]]~[[0]]
+
+\function _other-field-entries(field-key, type-key) [all[shadows+tiddlers]!match<target-tid>]:map[<currentTiddler>get<field-key>]+[join[ ]]
+\function _field-duplicates(field-key, type-key) [<target-tid>get<field-key>!is[blank]enlist-input[]]:filter[function[_other-field-entries],<field-key>,<type-key>enlist-input[]match<currentTiddler>]
+
+\function _field-length-blocks(field-key, type-key) [function[_get-blocking-min],<field-key>,<type-key>]:filter[function[_field-value-length],<field-key>compare:integer:lt<currentTiddler>]
+\function _field-unique-blocks(field-key, type-key) [function[_field-duplicates],<field-key>,<type-key>]:filter[function[_has-blocking-unique],<field-key>,<type-key>]
+
+\function _field-length-warns(field-key, type-key) [function[_get-warning-min],<field-key>,<type-key>]:filter[function[_field-value-length],<field-key>compare:integer:lt<currentTiddler>]
+\function _field-unique-warns(field-key, type-key) [function[_field-duplicates],<field-key>,<type-key>]:filter[function[_has-warning-unique],<field-key>,<type-key>]
+
+\function _field-invalid(field-key, type-key) [function[_field-length-blocks],<field-key>,<type-key>] [function[_field-unique-blocks],<field-key>,<type-key>]
+\function _any-field-invalid() [enlist<rrt.fields>]:filter[function[_field-invalid],<currentTiddler>,<type-key>]+[count[]compare:integer:gt[0]then[yes]]

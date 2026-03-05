@@ -1,0 +1,32 @@
+created: 20260305110750644
+modified: 20260305110750644
+tags: $:/tags/Stylesheet
+title: $:/plugins/rimir/typed/viewtemplate-styles
+type: text/vnd.tiddlywiki
+
+.rrt-field-bar {
+	float: right;
+	display: flex;
+	gap: 4px;
+	font-size: 0.85em;
+	margin: 0 0 4px 8px;
+}
+
+.rrt-field-cell-btn {
+	border: 1px solid <<colour tiddler-controls-foreground>>;
+	border-radius: 4px;
+	padding: 2px 6px;
+	cursor: pointer;
+	white-space: nowrap;
+	background: transparent;
+}
+
+.rrt-field-cell-btn:hover {
+	background: <<colour tiddler-controls-foreground-hover>>;
+	color: <<colour background>>;
+}
+
+.rrt-field-popup {
+	padding: 8px;
+	min-width: 200px;
+}

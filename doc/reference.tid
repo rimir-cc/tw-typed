@@ -1,0 +1,87 @@
+created: 20260305110750641
+modified: 20260305110750641
+rdt.order: 6
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: Reference
+title: $:/plugins/rimir/typed/doc/reference
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Type tiddler fields
+
+|!Field |!Required |!Description |
+|`rrt.type` |Yes |Must be `type` |
+|`key` |Yes |Unique type identifier |
+|`caption` |No |Display name |
+|`icon` |No |Emoji or icon reference |
+|`parent` |No |Parent type key (for inheritance) |
+|`upref` |No |Prefix for generated titles (e.g., `p` for project) |
+
+Body defines `rrt.fields:0()` (base) or `rrt.fields:1()` (subtype) — space-separated field keys.
+
+!! Field tiddler fields
+
+|!Field |!Required |!Description |
+|`rrt.type` |Yes |Must be `field` |
+|`key` |Yes |Field identifier (matches tiddler field name) |
+|`caption` |No |Display name |
+|`icon` |No |Emoji or icon |
+|`typed` |Yes |Editor type (see table below) |
+|`constraints` |No |Validation rules (see table below) |
+|`validity` |No |Restrict definition to specific type key |
+
+!! Enum tiddler fields
+
+|!Field |!Required |!Description |
+|`rrt.type` |Yes |Must be `enum` |
+|`key` |Yes |Enum identifier |
+|`parent` |No |Parent enum key |
+|`caption` |No |Display name |
+
+Body defines `rrt.options:0()` (base) or `rrt.options:1()` (child) — space-separated option values.
+
+!! `typed` values
+
+|!Value |!Editor |!Description |
+|`text` |Text input |Free-form text |
+|`date` |Date picker |Date value |
+|`enum:<key>` |Pills (single/multi) |Enum selection |
+|`<type-key>` |Object reference pills |Reference to typed tiddlers |
+|`$title` |Computed |Auto-generated title |
+|`$calculated` |Computed |Auto-calculated field |
+
+!! Constraint syntax
+
+|!Syntax |!Type |!Meaning |
+|`n:1` |Selection |Single select (not multi) |
+|`!N+` |Blocking |Minimum N values required |
+|`N+` |Warning |Minimum N values recommended |
+|`!u` |Blocking |Unique wiki-wide |
+|`u` |Warning |Unique wiki-wide (soft) |
+|`filter` |Computation |Title generation formula (with `$title`) |
+
+!! rrfunc filter operator
+
+Usage: `[rrfunc[functionName]]` or `[rrfunc[functionName],[arg]]`
+
+Safely calls a TW function by name. Returns `[]` if the function is undefined (unlike native `function[]` which leaks titles).
+
+!! Key functions (functions.tid)
+
+|!Function |!Purpose |
+|`rrt.fields()` |Aggregates `:0` + `:1` + `:2` field lists |
+|`rrt.options()` |Aggregates `:0` + `:1` + `:2` enum options |
+|`_locate_rrt(key, type)` |Finds most-specific field/enum definition (respects `validity`) |
+
+!! State tiddlers
+
+|!Pattern |!Purpose |
+|`$:/state/rimir/typed/spawner/*` |Spawner UI state |
+|`$:/state/rimir/typed/field-editor/*` |Field editor popup state |
+
+</$fill>
+</$transclude>

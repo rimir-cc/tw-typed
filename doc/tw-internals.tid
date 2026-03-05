@@ -1,0 +1,51 @@
+created: 20260305110750641
+modified: 20260305110750641
+rdt.order: 7
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: TW Internals
+title: $:/plugins/rimir/typed/doc/tw-internals
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! rrfunc operator
+
+Safely calls TW functions by name. Checks `isFunctionDefinition` before calling, returns empty array `[]` if undefined. Critical for inheritance where `rrt.fields:1`/`:2` may not exist on base types.
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="danger">
+<$fill $name="body">Native `function[]` leaks tiddler titles when the function is undefined. Always use `rrfunc` in the type system.</$fill>
+</$transclude>
+
+!! $importvariables
+
+Pulls functions/procedures from filter-matched tiddlers into scope. Used for:
+
+* Shared functions import (from `functions.tid`)
+* Dynamic type + parent import (for `rrt.fields`/`rrt.options` aggregators)
+* Deprecated by TW but no `\import` alternative for computed filters
+
+!! Discovery via custom fields
+
+The `rrt.type` field serves as a registration mechanism. `[all[shadows+tiddlers]rrt.type[type]]` discovers types without a central registry. Works across shadows (plugin tiddlers) and regular tiddlers.
+
+!! Function definitions in bodies
+
+`\function` at tiddler body start defines a callable function. `$importvariables` brings it into scope. `code-body: yes` field tells TW to treat the entire body as definitions.
+
+!! TW issue #9647
+
+Prevents dynamic iteration over function names (e.g., calling `rrt.fields:N` for variable N). This is why the numbered slot pattern (`:0`/`:1`/`:2`) is hardcoded to 3 levels.
+
+!! Field value analysis
+
+`_other-field-entries` function checks all tiddlers wiki-wide for uniqueness constraints, not just same-type instances.
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="info">
+<$fill $name="body">`$importvariables` is deprecated but remains the only way to import functions from a computed filter expression (where the tiddler title is determined at runtime).</$fill>
+</$transclude>
+
+</$fill>
+</$transclude>

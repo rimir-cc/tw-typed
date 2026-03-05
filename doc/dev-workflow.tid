@@ -1,0 +1,72 @@
+created: 20260305110750640
+modified: 20260305110750640
+rdt.order: 3
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: Dev Workflow
+title: $:/plugins/rimir/typed/doc/dev-workflow
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Plugin files
+
+|!File |!Role |
+|`functions.tid` |Shared function definitions |
+|`field-editor.tid` |Reusable per-field editor template |
+|`Spawner.tid` |Create/edit UI |
+|`viewtemplate-fields.tid` |Field Bar (ViewTemplate segment) |
+|`viewtemplate-styles.tid` |Field Bar CSS |
+|`Validator.tid` |Wiki-wide validation report |
+|`validator-styles.tid` |Validator CSS |
+|`TypeSystemOverview.tid` |Admin overview |
+|`modules/filters/rrfunc.js` |Safe function-call filter operator |
+
+!! Restart rules
+
+|!Change |!Restart needed? |
+|Edit Spawner/Validator/TypeSystemOverview |No — filesystem-watcher syncs |
+|Edit `rrfunc.js` |Yes — JS module |
+|Add/delete `.tid` files |Yes — directory scan at boot |
+|Add domain type/field/enum in another plugin |Yes — shadow tiddlers |
+
+!! Defining a type
+
+# Create `.tid` in domain plugin (e.g., `orga/typed/types/mytype.tid`)
+# Required fields: `key`, `rrt.type: type`, `title`
+# Optional: `parent` (inheritance), `icon`, `upref`, `caption`
+# Define `rrt.fields:1()` in body for extra fields
+# Restart server
+
+!! Defining a field
+
+# Create `.tid` with `key`, `rrt.type: field`, `typed` (editor type)
+# Optional: `constraints`, `validity` (type-specific override)
+# Add field key to parent type's `rrt.fields:1()` function
+# Restart server
+
+!! Type-specific field override
+
+Create a second field tiddler with same `key` + `validity: <type-key>`. The `typed` value can differ (e.g., restrict parent references to specific types).
+
+!! Defining an enum
+
+# Base: create `.tid` with `key`, `rrt.type: enum`, define `rrt.options:0()`
+# Child: set `parent` field, add `rrt.options:1()` for additional options
+# Reference from field with `typed: enum:<key>`
+# Restart server
+
+!! Known limitations
+
+* 3-level inheritance cap (`:0`/`:1`/`:2`) — TW issue #9647 prevents dynamic slot discovery
+* `$importvariables` is deprecated but necessary for dynamic type selection
+* No built-in `truncate` filter operator — Field Bar uses `splitregexp` + `first` + `join`
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="tip">
+<$fill $name="body">The typed plugin is the engine only. Domain-specific types, fields, and enums belong in separate plugins (e.g., the orga plugin).</$fill>
+</$transclude>
+
+</$fill>
+</$transclude>

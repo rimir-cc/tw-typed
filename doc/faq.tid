@@ -1,0 +1,35 @@
+created: 20260305110750640
+modified: 20260305110750640
+rdt.order: 5
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: FAQ
+title: $:/plugins/rimir/typed/doc/faq
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Q: Why rrfunc instead of the native function[] operator?
+
+Native `function[]` leaks tiddler titles when the function is undefined — it returns the title of the tiddler being filtered instead of an empty result. `rrfunc` checks `isFunctionDefinition` first and returns `[]` if undefined. This is critical for inheritance where `rrt.fields:1` or `:2` may not exist on base types.
+
+!! Q: Why is there a 3-level inheritance limit?
+
+TW issue #9647 prevents dynamic iteration over function names (calling `rrt.fields:N` for variable N). The numbered slot pattern (`:0`/`:1`/`:2`) is hardcoded because there's no way to dynamically discover how many levels exist.
+
+!! Q: How do I add a new field editor type?
+
+Edit `field-editor.tid` and add an `<%if%>` branch for your new `typed` value. The editor template dispatches on the `typed` field of the field definition tiddler. Built-in types: `text`, `date`, `enum:<key>`, type keys (object refs), `$title`, `$calculated`.
+
+!! Q: What's the difference between blocking and warning constraints?
+
+Blocking constraints (prefixed with `!`, e.g., `!1+`, `!u`) show red in the Validator and indicate data that must be fixed. Warning constraints (no prefix, e.g., `1+`, `u`) show orange and indicate recommendations. Both are checked wiki-wide by the Validator.
+
+!! Q: How does title generation work?
+
+When a field has `typed: $title` and `constraints: filter`, the constraint value is a TW filter expression. For example: `[get[parent]] [<type-tid>get[upref]] [get[abbrev]] +[join[]]` computes a title from parent, type prefix, and abbreviation fields. The Spawner evaluates this filter and sets the title automatically.
+
+</$fill>
+</$transclude>

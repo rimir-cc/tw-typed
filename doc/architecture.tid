@@ -1,0 +1,57 @@
+created: 20260305110750639
+modified: 20260305110750639
+rdt.order: 2
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: Architecture
+title: $:/plugins/rimir/typed/doc/architecture
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Schema model
+
+|!Schema element |!Discovery filter |!Key fields |
+|Type |`[rrt.type[type]]` |key, icon, parent, upref, `rrt.fields:0()` |
+|Field |`[rrt.type[field]]` |key, typed, constraints, validity |
+|Enum |`[rrt.type[enum]]` |key, parent, `rrt.options:0()` |
+
+!! Inheritance
+
+Single parent via `parent` field. Base type `_node` defines common fields + aggregator `rrt.fields()`. Subtypes add `rrt.fields:1()` and optionally `:2`. Same pattern for enums (`rrt.options:0`/`:1`/`:2`).
+
+!! Field resolution
+
+* Multiple field tiddlers can share the same `key`
+* `validity` field restricts a definition to specific types (most-specific wins)
+* `typed` controls the editor: `text`, `date`, `enum:<key>`, type keys (object refs), `$title`, `$calculated`
+
+!! Constraints
+
+|!Constraint |!Meaning |
+|`n:1` |Single select |
+|`!N+` |Min N required (blocking) |
+|`N+` |Min N required (warning) |
+|`!u` |Unique wiki-wide (blocking) |
+|`u` |Unique wiki-wide (warning) |
+|`filter` |Title computation formula |
+
+!! Shared infrastructure
+
+* ''functions.tid'' — all shared functions: field lookup (`_locate_rrt`), validation, helpers
+* ''field-editor.tid'' — reusable per-field editor template (handles enum/text/date/object + validation)
+
+!! UI components
+
+* ''Spawner flow'': select type → `$importvariables` pulls functions + type + parent → `rrt.fields()` merges all levels → per field: locate definition, render editor (or `$title`/`$calculated` special handling)
+* ''Validator flow'': per non-abstract type → per instance: check min/unique/title/calculated constraints → red (blocking) or orange (warning)
+* ''Field Bar flow'': only for tiddlers with `rrt.type` field → per field: compact cell (icon + truncated value), click opens popup with `field-editor`
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="info">
+<$fill $name="body">Uniqueness constraints (`!u`/`u`) are wiki-wide — they check all tiddlers, not just same-type instances.</$fill>
+</$transclude>
+
+</$fill>
+</$transclude>

@@ -1,0 +1,54 @@
+created: 20260305110750641
+modified: 20260305110750641
+rdt.hub-category: ui-framework
+rdt.hub-category-name: UI Framework & Domain Model
+rdt.hub-order: 3
+rdt.order: 1
+rdt.plugin-key: typed
+rdt.plugin-name: typed
+rdt.plugin-subtitle: Type system engine — schema definitions via tiddler fields
+rdt.section: Overview
+title: $:/plugins/rimir/typed/doc/overview
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! What it does
+
+Type system engine for TiddlyWiki. Schema definitions (types, fields, enums) are tiddlers discovered by the `rrt.type` field. No central registry — any plugin can contribute type definitions.
+
+!! Features
+
+* ''Schema-as-tiddlers'' — types, fields, and enums defined via tiddler fields (`rrt.type`)
+* ''Discovery'' — `[all[shadows+tiddlers]rrt.type[type]]` finds all types automatically
+* ''Inheritance'' — single parent via `parent` field, 3-level slot system (`:0`/`:1`/`:2`)
+* ''Spawner'' — create/edit UI, renders editors per field type
+* ''Field Bar'' — compact inline bar in ViewTemplate, per-field popup editor + validation
+* ''Validator'' — wiki-wide constraint report (min counts, uniqueness, computed titles)
+* ''TypeSystemOverview'' — admin view of all types, fields, and enums
+* ''Custom operator'' — `rrfunc` safely calls functions (returns empty if undefined, unlike native `function[]`)
+
+!! Schema model
+
+* ''Type tiddlers'' (`rrt.type: type`) — entity kinds with key, icon, parent, title prefix
+* ''Field tiddlers'' (`rrt.type: field`) — properties with data types and constraints
+* ''Enum tiddlers'' (`rrt.type: enum`) — fixed option sets with inheritance
+
+!! Prerequisites
+
+TiddlyWiki running in Node.js server mode
+
+!! Quick start
+
+# Define a type tiddler with `rrt.type: type`, `key: mytype`, and a `rrt.fields:0()` function
+# Define field tiddlers with `rrt.type: field`, `key: fieldname`, `typed: text`
+# Use the Spawner to create instances
+# Field Bar appears automatically on typed tiddlers in view mode
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="warning">
+<$fill $name="body">Do not replace `rrfunc` with native `function[]`. The native operator leaks tiddler titles when the function is undefined — `rrfunc` checks `isFunctionDefinition` and returns empty.</$fill>
+</$transclude>
+
+</$fill>
+</$transclude>

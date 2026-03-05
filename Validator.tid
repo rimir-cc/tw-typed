@@ -1,0 +1,67 @@
+created: 20260305110750639
+modified: 20260305110750639
+title: $:/plugins/rimir/typed/Validator
+type: text/vnd.tiddlywiki
+
+<$importvariables filter="[[$:/plugins/rimir/typed/functions]]">
+<$let type-field="rrt.type">
+
+! Typed Validator
+
+<$list filter="[function[_locate_rrt],[type]sort[key]]:filter[<currentTiddler>get[key]!prefix[_]]" variable="type-tid">
+<$let type-key={{{[<type-tid>get[key]]}}}>
+<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+
+!! <$text text={{{[<type-tid>get[icon]]}}}/> <$text text=<<type-key>>/> (<$count filter="[all[shadows+tiddlers]rrt.type<type-key>]"/>)
+
+<%if [all[shadows+tiddlers]rrt.type<type-key>first[]]%>
+<table class="rr-table">
+<tr><th>Instance</th><th>Field</th><th>Violation</th><th>Detail</th></tr>
+<$list filter="[all[shadows+tiddlers]rrt.type<type-key>sort[title]]">
+<$let target-tid=<<currentTiddler>>>
+<$list filter="[enlist<rrt.fields>]" variable="field-key">
+<$let field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}>
+
+<%if [function[_field-length-blocks],<field-key>,<type-key>]%>
+<tr class="rr-row-error"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>min length (blocking)</td><td>need <$text text={{{[function[_get-blocking-min],<field-key>,<type-key>]}}}/>+ chars, have <$text text={{{[function[_field-value-length],<field-key>]}}}/></td></tr>
+<%endif%>
+
+<%if [function[_field-length-warns],<field-key>,<type-key>]%>
+<tr class="rr-row-warn"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>min length (warning)</td><td>recommend <$text text={{{[function[_get-warning-min],<field-key>,<type-key>]}}}/>+ chars, have <$text text={{{[function[_field-value-length],<field-key>]}}}/></td></tr>
+<%endif%>
+
+<%if [function[_field-unique-blocks],<field-key>,<type-key>]%>
+<tr class="rr-row-error"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>uniqueness (blocking)</td><td>duplicate: "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>"</td></tr>
+<%endif%>
+
+<%if [function[_field-unique-warns],<field-key>,<type-key>]%>
+<tr class="rr-row-warn"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>uniqueness (warning)</td><td>duplicate: "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>"</td></tr>
+<%endif%>
+
+<%if [<field-tid>get[typed]match[$title]]%>
+<%if [function[_calculated]!match<target-tid>]%>
+<tr class="rr-row-error"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>title mismatch</td><td>expected "<<_calculated>>", actual "<$text text=<<target-tid>>/>"</td></tr>
+<%endif%>
+<%endif%>
+
+<%if [<field-tid>get[typed]match[$calculated]]%>
+<%if [function[_calculated]]:filter[<target-tid>get<field-key>!match<currentTiddler>] +[first[]]%>
+<tr class="rr-row-warn"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>calculated mismatch</td><td>expected "<<_calculated>>", stored "<$text text={{{[<target-tid>get<field-key>]}}}/>"</td></tr>
+<%endif%>
+<%endif%>
+
+</$let>
+</$list>
+</$let>
+</$list>
+</table>
+<%else%>
+//No instances//
+<%endif%>
+
+</$importvariables>
+</$let>
+</$list>
+
+</$let>
+</$importvariables>

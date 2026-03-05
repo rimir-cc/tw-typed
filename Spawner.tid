@@ -1,0 +1,83 @@
+created: 20260209190206505
+modified: 20260305110750637
+stream-list: 
+stream-type: default
+tags: 
+title: $:/plugins/rimir/typed/Spawner
+type: text/vnd.tiddlywiki
+
+\function _marker_new() __new
+
+\procedure _create_actions()
+<$action-createtiddler $basetitle=<<_calculated>> $template=<<target-tid>> rrt.type=<<type-key>>/>
+\end
+
+\function _calculate_state(type-key) [[$:/state/rimir/typed/example/__new:]addsuffix<type-key>]
+\function _calculate_target-tid(type-key) [<state:inst-selection>get[text]!is[blank]]~[function[_calculate_state],<type-key>]
+
+<$importvariables filter="[[$:/plugins/rimir/typed/functions]]">
+<$let
+	type-field="rrt.type"
+	state:type-selection="$:/state/rimir/typed/overview/selected-type"
+	state:inst-selection="$:/state/rimir/typed/overview/selected-inst"
+>
+
+''Type:''
+<$select tiddler=<<state:type-selection>> default='HelloThere' actions="<$action-deletetiddler $tiddler=<<state:inst-selection>>/>">
+<$list filter='[function[_locate_rrt],[type]sort[title]]:filter[<currentTiddler>get[key]!prefix[_]]'>
+<option value=<<currentTiddler>>><$view field='key'/></option>
+</$list>
+</$select> <$link to={{{[<state:type-selection>get[text]]}}}>=> type-def</$link><br>
+<$let
+	type-tid={{{[<state:type-selection>get[text]]}}}
+	type-key={{{[<type-tid>get[key]]}}}
+>
+<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<%if [get<type-field>match<type-key>count[]compare:integer:gt[0]]%>
+
+''Instance:''
+<$select tiddler=<<state:inst-selection>> default=<<_marker_new>>>
+<option value=<<_marker_new>>>**NEW**</option>
+<$list filter='[all[shadows+tiddlers]rrt.type<type-key>sort[title]]'>
+<option value=<<currentTiddler>>><$view field='caption'/></option>
+</$list>
+</$select><br>
+<%endif%>
+<$let
+	target-tid={{{[function[_calculate_target-tid],<type-key>]}}}
+>
+<$link to=<<target-tid>>>=> target</$link><p/>
+
+<%if [<state:inst-selection>!is[tiddler]][<state:inst-selection>get[text]match<_marker_new>]%>
+<$button>Clear</$button>
+<%endif%>
+
+<table>
+<$list filter="[enlist<rrt.fields>]" variable="field-key">
+<tr>
+<$let
+	field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}
+>
+<th><$link to=<<field-tid>>><<field-key>></$link></th>
+<td>
+<%if [<field-tid>get[typed]match[$title]]%>
+<!-- TITLE (needs to exist exactly ONCE!!) -->
+<$button actions=<<_create_actions>> disabled={{{[function[_any-field-invalid]]}}}>Create</$button>
+<<_calculated>>
+<%elseif [<field-tid>get[typed]match[$calculated]]%>
+<!-- CALCULATED/DERIVED -->
+<<_calculated>>
+<%else%>
+<$transclude $tiddler="$:/plugins/rimir/typed/field-editor"/>
+<%endif%>
+</td>
+</$let>
+</tr>
+</$list>
+</table>
+</$let>
+</$importvariables>
+
+</$let>
+</$let>
+</$importvariables>

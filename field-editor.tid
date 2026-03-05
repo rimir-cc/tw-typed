@@ -1,0 +1,45 @@
+created: 20260305110750642
+modified: 20260305110750642
+title: $:/plugins/rimir/typed/field-editor
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<%if [<field-tid>get[typed]match[$title]]%>
+<%elseif [<field-tid>get[typed]match[$calculated]]%>
+<%elseif [<field-tid>get[typed]prefix[enum:]]%>
+<$let
+	enum-key={{{[<field-tid>get[typed]removeprefix[enum:]]}}}
+	enum-tid={{{[function[_locate-enum-tiddler],<enum-key>,<type-key>]}}}
+>
+<$importvariables filter="[<enum-key>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[enlist<rrt.options>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}}/>
+</$importvariables>
+</$let>
+<%if [function[_field-unique-blocks],<field-key>,<type-key>]%>
+<div style="color:#c00;font-size:0.85em;">⛔ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%elseif [function[_field-unique-warns],<field-key>,<type-key>]%>
+<div style="color:#b80;font-size:0.85em;">⚠ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%endif%>
+<%elseif [<field-tid>get[typed]match[text]]%>
+<$edit-text tiddler=<<target-tid>> field=<<field-key>>/>
+<%if [function[_field-length-blocks],<field-key>,<type-key>]%>
+<div style="color:#c00;font-size:0.85em;">⛔ min <$text text={{{[function[_get-blocking-min],<field-key>,<type-key>]}}}/> chars</div>
+<%elseif [function[_field-length-warns],<field-key>,<type-key>]%>
+<div style="color:#b80;font-size:0.85em;">⚠ min <$text text={{{[function[_get-warning-min],<field-key>,<type-key>]}}}/> chars</div>
+<%endif%>
+<%if [function[_field-unique-blocks],<field-key>,<type-key>]%>
+<div style="color:#c00;font-size:0.85em;">⛔ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%elseif [function[_field-unique-warns],<field-key>,<type-key>]%>
+<div style="color:#b80;font-size:0.85em;">⚠ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%endif%>
+<%elseif [<field-tid>get[typed]match[date]]%>
+<$edit-date tiddler=<<target-tid>> field=<<field-key>>/>
+<%else%>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}}/>
+<%if [function[_field-unique-blocks],<field-key>,<type-key>]%>
+<div style="color:#c00;font-size:0.85em;">⛔ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%elseif [function[_field-unique-warns],<field-key>,<type-key>]%>
+<div style="color:#b80;font-size:0.85em;">⚠ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
+<%endif%>
+<%endif%>

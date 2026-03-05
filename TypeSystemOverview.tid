@@ -1,0 +1,11 @@
+created: 20260208110008191
+modified: 20260305110750638
+tags: 
+title: $:/plugins/rimir/typed/TypeSystemOverview
+type: text/vnd.tiddlywiki
+
+<$transclude $variable="slider" label="Registered Types" src="""
+<$transclude $variable="table-dynamic" filter="[all[shadows+tiddlers]rrt.type[type]]" fields="tbl-clone tbl-nav caption key icon upref parent"/>"""/>
+<$transclude $variable="slider" label="Registered Enums" src="""
+<$transclude $variable="table-dynamic" filter="[all[shadows+tiddlers]rrt.type[enum]]" fields="tbl-clone tbl-nav caption key icon parent"/>"""/>
+<$transclude $variable="slider" label="Registered Fields" src="""<$transclude $variable="table-dynamic" filter="[all[shadows+tiddlers]rrt.type[field]]" fields="tbl-clone tbl-nav caption key validity icon typed constraints"/>"""/>

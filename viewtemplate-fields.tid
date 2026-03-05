@@ -1,0 +1,48 @@
+created: 20260305110750644
+list-after: $:/core/ui/ViewTemplate/title
+modified: 20260305110750644
+tags: $:/tags/ViewTemplate
+title: $:/plugins/rimir/typed/viewtemplate-fields
+type: text/vnd.tiddlywiki
+
+\function _fieldbar-shorten(val) [<val>splitregexp[]first<fieldbar-max-length>join[]addsuffix[...]]
+\function _fieldbar-display(val) [<val>length[]compare:integer:gt<fieldbar-max-length>] :map[function[_fieldbar-shorten],<val>] ~[<val>]
+
+<%if [<currentTiddler>has[rrt.type]]%>
+<$importvariables filter="[[$:/plugins/rimir/typed/functions]]">
+<$let
+	type-field="rrt.type"
+	type-key={{{[<currentTiddler>get[rrt.type]]}}}
+	target-tid=<<currentTiddler>>
+	fieldbar-max-length="15"
+>
+<$let type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}>
+<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+
+<div class="rrt-field-bar">
+<$list filter="[enlist<rrt.fields>]" variable="field-key">
+<$let
+	field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}
+	popup-state={{{[<currentTiddler>addsuffix[/rrt-fieldbar/]addsuffix<field-key>]}}}
+>
+<%if [<field-tid>get[typed]!match[$title]!match[$calculated]]%>
+<span class="rrt-field-cell tc-popup-keep">
+<$button popup=<<popup-state>> class="tc-btn-invisible rrt-field-cell-btn" tooltip={{{[<field-tid>get[caption]]}}}>
+<$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<currentTiddler>get<field-key>]:map[function[_fieldbar-display],<currentTiddler>]}}}/>
+</$button>
+</span>
+<$reveal state=<<popup-state>> type="popup" position="belowleft" animate="yes" class="tc-popup-keep">
+<div class="tc-drop-down rrt-field-popup">
+<$transclude $tiddler="$:/plugins/rimir/typed/field-editor"/>
+</div>
+</$reveal>
+<%endif%>
+</$let>
+</$list>
+</div>
+
+</$importvariables>
+</$let>
+</$let>
+</$importvariables>
+<%endif%>
