@@ -22,6 +22,14 @@ No external prerequisites.
 
 Define a type tiddler with `rrt.type` and field definitions. Use the Spawner tab to create instances. Use the Validator tab to check for schema violations across all typed tiddlers.
 
+## Plugin Library
+
+Install from the [rimir plugin library](https://rimir-cc.github.io/tw-plugin-library/) via *Control Panel → Plugins → Get more plugins*.
+
+## Demo
+
+Try this plugin in the [live demo wiki](https://rimir-cc.github.io/tw-demo/).
+
 ## License
 
 MIT -- see [LICENSE.md](LICENSE.md)
