@@ -1,9 +1,9 @@
 created: 20260209190206505
 modified: 20260305110750637
-stream-list: 
+stream-list:
 stream-type: default
-tags: 
-title: $:/plugins/rimir/typed/Spawner
+tags:
+title: $:/plugins/rimir/typed/spawner
 type: text/vnd.tiddlywiki
 
 \function _marker_new() __new

@@ -89,7 +89,7 @@ Result: the `colors` enum has options `red green blue yellow purple`.
 
 !! Spawner usage
 
-# Open the Spawner tiddler (`$:/plugins/rimir/typed/Spawner`)
+# Open the Spawner tiddler (`$:/plugins/rimir/typed/spawner`)
 # Select a type from the dropdown — fields load dynamically via `$importvariables`
 # Fill in the required fields (blocking constraints shown in red)
 # The title field auto-computes if the type defines a `$title` + `filter` constraint
@@ -97,7 +97,7 @@ Result: the `colors` enum has options `red green blue yellow purple`.
 
 !! Validator interpretation
 
-Open the Validator (`$:/plugins/rimir/typed/Validator`). For each type:
+Open the Validator (`$:/plugins/rimir/typed/validator`). For each type:
 
 * ''Red entries'' (`!` prefix constraints): blocking — data must be fixed
 * ''Orange entries'' (no prefix): warnings — recommended but not required
