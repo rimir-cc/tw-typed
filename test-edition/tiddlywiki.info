@@ -1,7 +1,8 @@
 {
     "description": "Test edition for typed",
     "plugins": [
-        "tiddlywiki/jasmine"
+        "tiddlywiki/jasmine",
+        "rimir/typed"
     ],
     "themes": [
         "tiddlywiki/vanilla",
