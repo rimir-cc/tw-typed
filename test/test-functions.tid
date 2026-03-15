@@ -1,0 +1,42 @@
+title: $:/plugins/rimir/typed/test/test-functions
+description: Test typed helper functions for locating type and field tiddlers
+type: text/vnd.tiddlywiki-multiple
+tags: [[$:/tags/wiki-test-spec]]
+
+title: TypeDef
+rrt.type: type
+key: mytype
+type: text/vnd.tiddlywiki
+
+Type definition
++
+title: FieldDef
+rrt.type: field
+key: myfield
+type: text/vnd.tiddlywiki
+constraints: !3+ n:1
+
+Field definition
++
+title: EnumDef
+rrt.type: enum
+key: myenum
+type: text/vnd.tiddlywiki
+
+Enum definition
++
+title: Output
+
+\whitespace trim
+\function _locate_rrt(type) [all[shadows+tiddlers]rrt.type<type>]
+\function _locate-type-tiddler(type-key) [function[_locate_rrt],[type]key<type-key>]
+\function _locate-field-tiddler(field-key, type-key) [function[_locate_rrt],[field]key<field-key>]:filter[<currentTiddler>get[validity]enlist-input[]match<type-key>]~[function[_locate_rrt],[field]key<field-key>!has[validity]]
+\function _locate-enum-tiddler(enum-key, type-key) [function[_locate_rrt],[enum]key<enum-key>]
+\function _calculate_selection(field-tid) [<field-tid>get[constraints]enlist-input[]match[n:1]then[single]]~[[multi]]
+\function _get-blocking-min(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]prefix[!]suffix[+]first[]]:map[<currentTiddler>removeprefix[!]removesuffix[+]]
+
+type:<$text text={{{ [function[_locate-type-tiddler],[mytype]] }}}/>,field:<$text text={{{ [function[_locate-field-tiddler],[myfield],[mytype]] }}}/>,enum:<$text text={{{ [function[_locate-enum-tiddler],[myenum],[mytype]] }}}/>,sel:<$text text={{{ [function[_calculate_selection],[FieldDef]] }}}/>,bmin:<$text text={{{ [function[_get-blocking-min],[myfield],[mytype]] }}}/>
++
+title: ExpectedResult
+
+<p>type:TypeDef,field:FieldDef,enum:EnumDef,sel:single,bmin:3</p>
