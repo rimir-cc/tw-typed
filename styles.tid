@@ -1,0 +1,13 @@
+tags: $:/tags/Stylesheet
+title: $:/plugins/rimir/typed/styles
+type: text/vnd.tiddlywiki
+
+.rrt-validation-error {
+	color: <<colour alert-highlight>>;
+	font-size: 0.85em;
+}
+
+.rrt-validation-warning {
+	color: #b8860b;
+	font-size: 0.85em;
+}
