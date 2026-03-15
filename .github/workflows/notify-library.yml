@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p /tmp/plugins/rimir/typed
           cp -r . /tmp/plugins/rimir/typed/
-          TIDDLYWIKI_PLUGIN_PATH=/tmp/plugins npx tiddlywiki test-edition --test spec="typed"
+          TIDDLYWIKI_CLI_MODE=1 TIDDLYWIKI_PLUGIN_PATH=/tmp/plugins npx tiddlywiki test-edition --test spec="typed"
 
   notify:
     needs: test
