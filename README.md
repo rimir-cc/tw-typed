@@ -13,6 +13,10 @@ Define schemas via tiddler fields, validate instances, and create new typed tidd
 * **Field editor** -- type-aware input controls for editing typed fields
 * **Inheritance** -- parent types for shared field definitions
 * **Custom filters** -- `rrfunc` filter functions for type system queries
+* **Inline field bar** -- compact editable field display for embedding in app views
+* **Filter panel** -- auto-generated filter UI from field definitions (text search, enum pills, reference pills)
+* **Filter summary** -- compact button with active filter count badge, opens filter panel in popup
+* **`rrt-filter` operator** -- JS filter operator for generic type-aware list filtering
 
 ## Prerequisites
 

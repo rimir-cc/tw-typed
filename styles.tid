@@ -11,3 +11,54 @@ type: text/vnd.tiddlywiki
 	color: #b8860b;
 	font-size: 0.85em;
 }
+
+/* Filter panel */
+.rrt-filter-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 4px 0;
+}
+
+.rrt-filter-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.rrt-filter-label {
+	min-width: 90px;
+	font-size: 0.85em;
+	white-space: nowrap;
+	color: <<colour muted-foreground>>;
+}
+
+.rrt-filter-dropdown {
+	padding: 12px;
+	min-width: 300px;
+	max-width: 500px;
+}
+
+/* Filter summary button */
+.rrt-filter-btn {
+	border: 1px solid <<colour tiddler-controls-foreground>>;
+	border-radius: 4px;
+	padding: 2px 8px;
+	font-size: 0.85em;
+}
+
+.rrt-filter-btn:hover {
+	background: <<colour tiddler-controls-foreground-hover>>;
+	color: <<colour background>>;
+}
+
+.rrt-filter-badge {
+	display: inline-block;
+	background: <<colour primary>>;
+	color: <<colour background>>;
+	border-radius: 8px;
+	padding: 0 5px;
+	font-size: 0.75em;
+	min-width: 14px;
+	text-align: center;
+}

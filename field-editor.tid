@@ -36,7 +36,7 @@ type: text/vnd.tiddlywiki
 <%elseif [<field-tid>get[typed]match[date]]%>
 <$edit-date tiddler=<<target-tid>> field=<<field-key>>/>
 <%else%>
-<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}}/>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}} filterable="inline"/>
 <%if [function[_field-unique-blocks],<field-key>,<type-key>]%>
 <div class="rrt-validation-error">⛔ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
 <%elseif [function[_field-unique-warns],<field-key>,<type-key>]%>

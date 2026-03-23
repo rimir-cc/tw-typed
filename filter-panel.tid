@@ -1,0 +1,88 @@
+created: 20260323140000000
+modified: 20260323140000000
+title: $:/plugins/rimir/typed/filter-panel
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<!-- Generic filter panel for typed entities.
+     Parameters (set via $let before transcluding):
+       type-key    — the rrt.type key to filter (e.g. "task", "project")
+       filter-state — base tiddler for storing filter values (e.g. "$:/state/my-filter")
+                      Each field's value stored at <filter-state>/<field-key>
+-->
+
+\import $:/plugins/rimir/typed/functions
+
+<$let
+  type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}
+>
+<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+
+<div class="rrt-filter-panel">
+<$list filter="[enlist<rrt.fields>]" variable="field-key">
+<$let
+  field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}
+  field-typed={{{[<field-tid>get[typed]]}}}
+  field-state={{{[<filter-state>addsuffix[/]addsuffix<field-key>]}}}
+>
+
+<%if [<field-typed>match[$title]] %>
+<!-- skip computed title -->
+<%elseif [<field-typed>match[$calculated]] %>
+<!-- skip calculated -->
+<%elseif [<field-typed>match[text]] %>
+<div class="rrt-filter-row">
+<span class="rrt-filter-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<field-tid>get[caption]]}}}/></span>
+<$edit-text tiddler=<<field-state>> field="text" class="rr-input" tag="input" placeholder="Search..." default=""/>
+</div>
+
+<%elseif [<field-typed>prefix[enum:]] %>
+<$let
+  enum-key={{{[<field-typed>removeprefix[enum:]]}}}
+  enum-tid={{{[function[_locate-enum-tiddler],<enum-key>,<type-key>]}}}
+>
+<$importvariables filter="[<enum-key>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
+<div class="rrt-filter-row">
+<span class="rrt-filter-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<field-tid>get[caption]]}}}/></span>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid={{{[<filter-state>addsuffix[-pills]]}}} elements="[enlist<rrt.options>]" sync-tiddler=<<field-state>> sync-field="text" selection="multi"/>
+</div>
+</$importvariables>
+</$let>
+
+<%elseif [<field-typed>match[date]] %>
+<!-- skip date fields in filter for now -->
+
+<%else%>
+<!-- object reference field — render as multi-select pills -->
+<$let ref-elements={{{[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>]}}}>
+<%if [<ref-elements>!is[blank]] %>
+<div class="rrt-filter-row">
+<span class="rrt-filter-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<field-tid>get[caption]]}}}/></span>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid={{{[<filter-state>addsuffix[-pills]]}}} elements="[<ref-elements>enlist-input[]]" sync-tiddler=<<field-state>> sync-field="text" selection="multi">
+<$fill $name="view"><$text text={{{ [<element>get[caption]] ~[<element>get[abbrev]] ~[<element>] }}}/></$fill>
+</$transclude>
+</div>
+<%endif%>
+</$let>
+
+<%endif%>
+
+</$let>
+</$list>
+
+<%if [enlist<rrt.fields>count[]compare:integer:gt[0]] %>
+<div class="rrt-filter-row" style="margin-top:8px;">
+<$button class="rr-link-btn" tooltip="Clear all filters">
+<$list filter="[enlist<rrt.fields>]" variable="fk">
+<$action-deletetiddler $tiddler={{{[<filter-state>addsuffix[/]addsuffix<fk>]}}}/>
+</$list>
+clear filters
+</$button>
+</div>
+<%endif%>
+
+</div>
+
+</$importvariables>
+</$let>

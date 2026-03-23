@@ -1,0 +1,41 @@
+created: 20260323140000000
+modified: 20260323140000000
+title: $:/plugins/rimir/typed/filter-summary
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<!-- Compact filter summary with popup to open filter-panel.
+     Parameters (set via $let before transcluding):
+       type-key     — the rrt.type key
+       filter-state — base tiddler for filter values
+-->
+
+\import $:/plugins/rimir/typed/functions
+
+\function _filter-active-count() [enlist<rrt.fields>]:map[<filter-state>addsuffix[/]addsuffix<currentTiddler>]+[is[tiddler]]:filter[get[text]!is[blank]] +[count[]]
+
+<$let
+  type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}
+  popup-state={{{[<filter-state>addsuffix[/popup]]}}}
+>
+<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+
+<span class="rrt-filter-summary tc-popup-keep">
+<$button popup=<<popup-state>> class="tc-btn-invisible rrt-filter-btn tc-popup-keep" tooltip="Filter">
+🔍 <$let cnt={{{ [function[_filter-active-count]] ~[[0]] }}}>
+<%if [<cnt>compare:integer:gt[0]] %>
+<span class="rrt-filter-badge"><<cnt>></span>
+<%endif%>
+</$let>
+</$button>
+</span>
+
+<$reveal state=<<popup-state>> type="popup" position="belowleft" animate="yes" class="tc-popup-keep">
+<div class="tc-drop-down rrt-filter-dropdown tc-popup-keep">
+<$transclude $tiddler="$:/plugins/rimir/typed/filter-panel"/>
+</div>
+</$reveal>
+
+</$importvariables>
+</$let>
