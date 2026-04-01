@@ -19,6 +19,7 @@ type: text/vnd.tiddlywiki
 \function _get-warning-min(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]!prefix[!]suffix[+]first[]]:map[<currentTiddler>removesuffix[+]]
 \function _has-blocking-unique(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]match[!u]]
 \function _has-warning-unique(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]match[u]]
+\function _get-nest-limit(field-key, type-key) [function[_locate-field-tiddler],<field-key>,<type-key>get[constraints]enlist-input[]prefix[nest:]first[]removeprefix[nest:]]
 
 \function _field-value-length(field-key) [<target-tid>get<field-key>length[]]~[[0]]
 
@@ -31,5 +32,8 @@ type: text/vnd.tiddlywiki
 \function _field-length-warns(field-key, type-key) [function[_get-warning-min],<field-key>,<type-key>]:filter[function[_field-value-length],<field-key>compare:integer:lt<currentTiddler>]
 \function _field-unique-warns(field-key, type-key) [function[_field-duplicates],<field-key>,<type-key>]:filter[function[_has-warning-unique],<field-key>,<type-key>]
 
-\function _field-invalid(field-key, type-key) [function[_field-length-blocks],<field-key>,<type-key>] [function[_field-unique-blocks],<field-key>,<type-key>]
+\function _field-nest-blocks(field-key, type-key) [function[_get-nest-limit],<field-key>,<type-key>!is[blank]] :map[<target-tid>get<field-key>] :filter[<currentTiddler>get[rrt.type]match<type-key>] :map[<currentTiddler>get<field-key>] :filter[<currentTiddler>!is[blank]] :filter[<currentTiddler>get[rrt.type]match<type-key>]
+\function _nest-excluded-parents(field-key, type-key) [function[_get-nest-limit],<field-key>,<type-key>!is[blank]] :map[all[shadows+tiddlers]rrt.type<type-key>] :filter[<currentTiddler>get<field-key>get[rrt.type]match<type-key>]
+
+\function _field-invalid(field-key, type-key) [function[_field-length-blocks],<field-key>,<type-key>] [function[_field-unique-blocks],<field-key>,<type-key>] [function[_field-nest-blocks],<field-key>,<type-key>]
 \function _any-field-invalid() [enlist<rrt.fields>]:filter[function[_field-invalid],<currentTiddler>,<type-key>]+[count[]compare:integer:gt[0]then[yes]]

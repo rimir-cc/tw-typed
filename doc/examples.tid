@@ -61,6 +61,21 @@ constraints: !1+
 validity: widget
 ```
 
+!! Nesting limit (`nest:N`)
+
+A `parent` field that references the same type can cause infinite nesting chains. Use `nest:N` to cap the depth. With `nest:1`, a note can have a note as parent, but that parent note cannot itself be a child of another note.
+
+```
+title: $:/plugins/myplugin/typed/fields/note_parent
+rrt.type: field
+key: parent
+typed: note
+constraints: n:1 nest:1
+validity: note
+```
+
+The validator reports a blocking error when the chain exceeds the limit. The field editor automatically excludes tiddlers that are already at max depth from the parent picker, so users cannot create an invalid chain in the first place.
+
 !! Define an enum
 
 Base enum:

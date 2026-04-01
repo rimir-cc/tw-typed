@@ -50,6 +50,10 @@ type: text/vnd.tiddlywiki
 <%endif%>
 <%endif%>
 
+<%if [function[_field-nest-blocks],<field-key>,<type-key>]%>
+<tr class="rr-row-error"><td><$link to=<<target-tid>>><$text text={{{[<target-tid>split[/]last[]]}}}/></$link></td><td><<field-key>></td><td>nesting depth (blocking)</td><td>max <$text text={{{[function[_get-nest-limit],<field-key>,<type-key>]}}}/>-level nesting exceeded</td></tr>
+<%endif%>
+
 </$let>
 </$list>
 </$let>

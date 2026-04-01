@@ -62,6 +62,7 @@ Body defines `rrt.options:0()` (base) or `rrt.options:1()` (child) — space-sep
 |`N+` |Warning |Minimum N values recommended |
 |`!u` |Blocking |Unique wiki-wide |
 |`u` |Warning |Unique wiki-wide (soft) |
+|`nest:N` |Blocking |Max N levels of same-type nesting |
 |`filter` |Computation |Title generation formula (with `$title`) |
 
 !! rrfunc filter operator
@@ -76,6 +77,9 @@ Safely calls a TW function by name. Returns `[]` if the function is undefined (u
 |`rrt.fields()` |Aggregates `:0` + `:1` + `:2` field lists |
 |`rrt.options()` |Aggregates `:0` + `:1` + `:2` enum options |
 |`_locate_rrt(key, type)` |Finds most-specific field/enum definition (respects `validity`) |
+|`_get-nest-limit(field-key, type-key)` |Extracts the numeric limit from a `nest:N` constraint |
+|`_field-nest-blocks(field-key, type-key)` |Returns blocking violations when nesting depth exceeds `nest:N` |
+|`_nest-excluded-parents(field-key, type-key)` |Lists same-type tiddlers already at max nesting depth (excluded from parent picker) |
 
 !! State tiddlers
 

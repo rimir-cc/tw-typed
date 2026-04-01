@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|v0.1.6 |2026-04-01 |Add `nest:N` constraint for same-type nesting depth limits; filter nested items from parent pills; validator reports nesting violations |
 |v0.1.5 |2026-03-23 |Add filter-panel, filter-summary, field-bar-inline components and filter styles |
 |v0.1.4 |2026-03-15 |Replace inline style attributes with CSS classes, add styles.tid stylesheet |
 |v0.1.3 |2026-03-15 |Add name field to plugin.info |
