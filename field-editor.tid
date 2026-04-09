@@ -33,6 +33,8 @@ type: text/vnd.tiddlywiki
 <%elseif [function[_field-unique-warns],<field-key>,<type-key>]%>
 <div class="rrt-validation-warning">⚠ "<$text text={{{[function[_field-duplicates],<field-key>,<type-key>join[, ]]}}}/>" already exists</div>
 <%endif%>
+<%elseif [<field-tid>get[typed]match[datetime]]%>
+<$edit-date tiddler=<<target-tid>> field=<<field-key>> format="YYYY-MM-DD HH:mm" showTime="yes" use24hour="yes"/>
 <%elseif [<field-tid>get[typed]match[date]]%>
 <$edit-date tiddler=<<target-tid>> field=<<field-key>>/>
 <%else%>
