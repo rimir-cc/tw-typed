@@ -42,7 +42,7 @@ type: text/vnd.tiddlywiki
   enum-key={{{[<field-typed>removeprefix[enum:]]}}}
   enum-tid={{{[function[_locate-enum-tiddler],<enum-key>,<type-key>]}}}
 >
-<$importvariables filter="[<enum-key>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
+<$importvariables filter="[<enum-key>][<enum-tid>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
 <div class="rrt-filter-row">
 <span class="rrt-filter-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<field-tid>get[caption]]}}}/></span>
 <$transclude $tiddler="$:/plugins/rimir/components/pills" instid={{{[<filter-state>addsuffix[-pills]]}}} elements="[enlist<rrt.options>]" sync-tiddler=<<field-state>> sync-field="text" selection="multi"/>
@@ -59,9 +59,7 @@ type: text/vnd.tiddlywiki
 <%if [<ref-elements>!is[blank]] %>
 <div class="rrt-filter-row">
 <span class="rrt-filter-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<field-tid>get[caption]]}}}/></span>
-<$transclude $tiddler="$:/plugins/rimir/components/pills" instid={{{[<filter-state>addsuffix[-pills]]}}} elements="[<ref-elements>enlist-input[]]" sync-tiddler=<<field-state>> sync-field="text" selection="multi">
-<$fill $name="view"><$text text={{{ [<element>get[caption]] ~[<element>get[abbrev]] ~[<element>] }}}/></$fill>
-</$transclude>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid={{{[<filter-state>addsuffix[-pills]]}}} elements="[<ref-elements>enlist-input[]]" sync-tiddler=<<field-state>> sync-field="text" selection="multi" view-field={{{[{$:/config/rimir/typed/pill-display}!match[title]]}}}/>
 </div>
 <%endif%>
 </$let>

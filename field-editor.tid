@@ -12,7 +12,7 @@ type: text/vnd.tiddlywiki
 	enum-key={{{[<field-tid>get[typed]removeprefix[enum:]]}}}
 	enum-tid={{{[function[_locate-enum-tiddler],<enum-key>,<type-key>]}}}
 >
-<$importvariables filter="[<enum-key>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
+<$importvariables filter="[<enum-key>][<enum-tid>][<enum-tid>get[parent]]:map[function[_locate-enum-tiddler],<currentTiddler>,<type-key>]">
 <$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[enlist<rrt.options>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}}/>
 </$importvariables>
 </$let>
@@ -38,7 +38,7 @@ type: text/vnd.tiddlywiki
 <%elseif [<field-tid>get[typed]match[date]]%>
 <$edit-date tiddler=<<target-tid>> field=<<field-key>>/>
 <%else%>
-<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>] -[function[_nest-excluded-parents],<field-key>,<type-key>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}} filterable="inline"/>
+<$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>] -[function[_nest-excluded-parents],<field-key>,<type-key>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}} filterable="inline" view-field={{{[{$:/config/rimir/typed/pill-display}!match[title]]}}}/>
 <%if [function[_field-nest-blocks],<field-key>,<type-key>]%>
 <div class="rrt-validation-error">⛔ nesting depth exceeded (max <$text text={{{[function[_get-nest-limit],<field-key>,<type-key>]}}}/>)</div>
 <%elseif [function[_field-unique-blocks],<field-key>,<type-key>]%>

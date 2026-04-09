@@ -3,6 +3,18 @@ modified: 20260305110750644
 title: $:/plugins/rimir/typed/settings
 type: text/vnd.tiddlywiki
 
-<div class="rr-settings-info-card">
-No configurable settings. Future settings will appear here.
+!! Reference pills
+
+<div class="rr-input-row">
+<span class="rr-muted">Which field to display on reference pills (entity links) in the editor and field bar. Falls back to tiddler title if the chosen field is empty.</span>
+</div>
+
+<div class="rr-input-row">
+Display field:
+<$select tiddler="$:/config/rimir/typed/pill-display" default="title">
+<option value="title">Title</option>
+<option value="caption">Caption</option>
+<option value="subtitle">Subtitle</option>
+<option value="abbrev">Abbreviation</option>
+</$select>
 </div>
