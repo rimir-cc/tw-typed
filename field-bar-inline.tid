@@ -15,6 +15,7 @@ type: text/vnd.tiddlywiki
 
 \function _fieldbar-shorten(val) [<val>splitregexp[]first<fieldbar-max-length>join[]addsuffix[...]]
 \function _fieldbar-display(val) [<val>length[]compare:integer:gt<fieldbar-max-length>] :map[function[_fieldbar-shorten],<val>] ~[<val>]
+\function _fieldbar-resolve-ref(val) [<val>get{$:/config/rimir/typed/pill-display}!is[blank]] ~[<val>]
 
 <%if [<target-tid>has[rrt.type]]%>
 <$let
@@ -34,7 +35,7 @@ type: text/vnd.tiddlywiki
 <%if [<field-tid>get[typed]!match[$title]!match[$calculated]]%>
 <span class="rrt-field-cell tc-popup-keep">
 <$button popup=<<popup-state>> class="tc-btn-invisible rrt-field-cell-btn" tooltip={{{[<field-tid>get[caption]]}}}>
-<$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<target-tid>get<field-key>]:map[function[_fieldbar-display],<currentTiddler>]}}}/>
+<$text text={{{[<field-tid>get[icon]]}}}/> <$text text={{{[<target-tid>get<field-key>]:map[function[_fieldbar-resolve-ref],<currentTiddler>]:map[function[_fieldbar-display],<currentTiddler>]}}}/>
 </$button>
 </span>
 <$reveal state=<<popup-state>> type="popup" position="belowleft" animate="yes" class="tc-popup-keep">

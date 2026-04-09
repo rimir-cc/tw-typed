@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|v0.1.9 |2026-04-09 |Configurable reference pill display: show title, caption, subtitle, or abbrev (settings page); applies to editor, field bar, inline field bar, and filter panel |
 |v0.1.8 |2026-04-09 |Field editor: support `datetime` typed fields with time picker (showTime, 24h format) |
 |v0.1.7 |2026-04-08 |Add rrt-filter unit tests (18 specs) |
 |v0.1.6 |2026-04-01 |Add `nest:N` constraint for same-type nesting depth limits; filter nested items from parent pills; validator reports nesting violations |
