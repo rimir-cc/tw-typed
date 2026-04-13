@@ -10,7 +10,7 @@ type: text/vnd.tiddlywiki
 
 <$list filter="[function[_locate_rrt],[type]sort[key]]:filter[<currentTiddler>get[key]!prefix[_]]" variable="type-tid">
 <$let type-key={{{[<type-tid>get[key]]}}}>
-<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 
 !! <$text text={{{[<type-tid>get[icon]]}}}/> <$text text=<<type-key>>/> (<$count filter="[all[shadows+tiddlers]rrt.type<type-key>]"/>)
 

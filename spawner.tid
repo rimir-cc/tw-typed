@@ -49,7 +49,7 @@ type: text/vnd.tiddlywiki
 	type-tid={{{[<state:type-selection>get[text]]}}}
 	type-key={{{[<type-tid>get[key]]}}}
 >
-<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 <%if [get<type-field>match<type-key>count[]compare:integer:gt[0]]%>
 
 ''Instance:''

@@ -17,7 +17,7 @@ type: text/vnd.tiddlywiki
 <$let
   type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}
 >
-<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 
 <div class="rrt-filter-panel">
 <$list filter="[enlist<rrt.fields>]" variable="field-key">

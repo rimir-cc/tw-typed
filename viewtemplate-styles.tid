@@ -7,9 +7,18 @@ type: text/vnd.tiddlywiki
 .rrt-field-bar {
 	float: right;
 	display: flex;
+	align-items: center;
 	gap: 4px;
 	font-size: 0.85em;
 	margin: 0 0 4px 8px;
+}
+
+.rrt-entity-icon {
+	display: inline-flex;
+	align-items: center;
+	cursor: help;
+	font-size: 1.1em;
+	padding: 0 2px;
 }
 
 .rrt-field-cell-btn {

@@ -20,7 +20,13 @@ type: text/vnd.tiddlywiki
 
 !! Inheritance
 
-Single parent via `parent` field. Base type `_node` defines common fields + aggregator `rrt.fields()`. Subtypes add `rrt.fields:1()` and optionally `:2`. Same pattern for enums (`rrt.options:0`/`:1`/`:2`).
+Single parent via `parent` field. Base type `_node` defines common fields + aggregator `rrt.fields()`. Subtypes add `rrt.fields:1()` and optionally `:2`, and may also override `rrt.fields:0()` to drop inherited base fields. Same pattern for enums (`rrt.options:0`/`:1`/`:2`).
+
+Parent type variables are imported before the subtype's, so subtype slot definitions take precedence over the parent's — this is what enables the `:0` override.
+
+!! Field bar
+
+The field bar (both `viewtemplate-fields` and `field-bar-inline`) starts with the type icon, which acts as an identifier/hover for the entity. Hovering shows `type-key: caption` (falls back to tiddler title if no caption).
 
 !! Field resolution
 

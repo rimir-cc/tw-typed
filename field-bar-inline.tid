@@ -24,9 +24,12 @@ type: text/vnd.tiddlywiki
   fieldbar-max-length="15"
 >
 <$let type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}>
-<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 
 <div class="rrt-field-bar" style="float:none;margin:0;">
+<span class="rrt-entity-icon" title={{{ [<target-tid>get[caption]!is[blank]] ~[<target-tid>] +[addprefix[: ]addprefix<type-key>] }}}>
+<$text text={{{[<type-tid>get[icon]]}}}/>
+</span>
 <$list filter="[enlist<rrt.fields>]" variable="field-key">
 <$let
   field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}

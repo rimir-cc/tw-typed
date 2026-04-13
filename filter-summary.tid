@@ -19,7 +19,7 @@ type: text/vnd.tiddlywiki
   type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}
   popup-state={{{[<filter-state>addsuffix[/popup]]}}}
 >
-<$importvariables filter="[<type-key>][<type-tid>get[parent]]:map[function[_locate-type-tiddler],<currentTiddler>]">
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 
 <span class="rrt-filter-summary tc-popup-keep">
 <$button popup=<<popup-state>> class="tc-btn-invisible rrt-filter-btn tc-popup-keep" tooltip="Filter">
