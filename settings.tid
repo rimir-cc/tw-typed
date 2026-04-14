@@ -3,10 +3,10 @@ modified: 20260305110750644
 title: $:/plugins/rimir/typed/settings
 type: text/vnd.tiddlywiki
 
-!! Reference pills
+!! Reference display
 
 <div class="rr-input-row">
-<span class="rr-muted">Which field to display on reference pills (entity links) in the editor and field bar. Falls back to tiddler title if the chosen field is empty.</span>
+<span class="rr-muted">Which field to display on reference pills/tags (entity links) in the editor and field bar. Falls back to tiddler title if the chosen field is empty.</span>
 </div>
 
 <div class="rr-input-row">
@@ -16,5 +16,19 @@ Display field:
 <option value="caption">Caption</option>
 <option value="subtitle">Subtitle</option>
 <option value="abbrev">Abbreviation</option>
+</$select>
+</div>
+
+!! Object-reference editor
+
+<div class="rr-input-row">
+<span class="rr-muted">How to select object references (person, team, project, etc.) in field editors. Pills shows all options as clickable buttons. Typeahead shows a search input with filtered dropdown — better for large lists.</span>
+</div>
+
+<div class="rr-input-row">
+Editor mode:
+<$select tiddler="$:/config/rimir/typed/ref-editor" default="typeahead">
+<option value="typeahead">Typeahead (search + dropdown)</option>
+<option value="pills">Pills (clickable buttons)</option>
 </$select>
 </div>

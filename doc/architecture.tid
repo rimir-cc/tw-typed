@@ -28,6 +28,15 @@ Parent type variables are imported before the subtype's, so subtype slot definit
 
 The field bar (both `viewtemplate-fields` and `field-bar-inline`) starts with the type icon, which acts as an identifier/hover for the entity. Hovering shows `type-key: caption` (falls back to tiddler title if no caption).
 
+!! Object-reference editor modes
+
+Object-ref fields (typed as entity type keys) support two editor modes, configurable via `$:/config/rimir/typed/ref-editor`:
+
+* ''Typeahead'' (default) — search input with filtered dropdown. Better for large option sets. Selected values shown as compact tags below the input. Searches across title, caption, subtitle, and abbrev simultaneously.
+* ''Pills'' — all options rendered as clickable pill buttons with optional inline filter. Better for small option sets (also used for enum fields regardless of config).
+
+The display field for both modes is controlled by `$:/config/rimir/typed/pill-display` (title, caption, subtitle, or abbrev).
+
 !! Field resolution
 
 * Multiple field tiddlers can share the same `key`

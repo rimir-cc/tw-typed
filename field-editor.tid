@@ -38,7 +38,18 @@ type: text/vnd.tiddlywiki
 <%elseif [<field-tid>get[typed]match[date]]%>
 <$edit-date tiddler=<<target-tid>> field=<<field-key>>/>
 <%else%>
+<%if [{$:/config/rimir/typed/ref-editor}match[pills]] %>
 <$transclude $tiddler="$:/plugins/rimir/components/pills" instid=<<field-key>> elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>] -[function[_nest-excluded-parents],<field-key>,<type-key>]" sync-tiddler=<<target-tid>> sync-field=<<field-key>> selection={{{[function[_calculate_selection],<field-tid>]}}} filterable="inline" view-field={{{[{$:/config/rimir/typed/pill-display}!match[title]]}}}/>
+<%else%>
+<$let
+  ta-elements="[<field-tid>get[typed]]:map[function[_find-available-objects],<currentTiddler>join<_concat_hack_delim>]+[split<_concat_hack_delim>] -[function[_nest-excluded-parents],<field-key>,<type-key>]"
+  ta-selection={{{[function[_calculate_selection],<field-tid>]}}}
+  ta-view-field={{{[{$:/config/rimir/typed/pill-display}!match[title]]}}}
+  ta-instid={{{ [<target-tid>addsuffix[/]addsuffix<field-key>] }}}
+>
+<$transclude $tiddler="$:/plugins/rimir/typed/typeahead-select" $mode="block"/>
+</$let>
+<%endif%>
 <%if [function[_field-nest-blocks],<field-key>,<type-key>]%>
 <div class="rrt-validation-error">⛔ nesting depth exceeded (max <$text text={{{[function[_get-nest-limit],<field-key>,<type-key>]}}}/>)</div>
 <%elseif [function[_field-unique-blocks],<field-key>,<type-key>]%>

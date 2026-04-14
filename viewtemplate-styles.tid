@@ -39,3 +39,59 @@ type: text/vnd.tiddlywiki
 	padding: 8px;
 	min-width: 200px;
 }
+
+/* Typeahead select */
+.rrt-ta-selected {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3px;
+	margin-top: 4px;
+}
+.rrt-ta-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	padding: 1px 6px;
+	border-radius: 3px;
+	background: <<colour tag-background>>;
+	color: <<colour tag-foreground>>;
+	font-size: 0.85em;
+	white-space: nowrap;
+}
+.rrt-ta-remove {
+	font-size: 0.9em;
+	padding: 0 2px;
+	line-height: 1;
+	color: <<colour tag-foreground>>;
+	opacity: 0.6;
+}
+.rrt-ta-remove:hover { opacity: 1; }
+.rrt-ta-input {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 3px 6px;
+}
+.rrt-ta-dropdown {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid <<colour tiddler-border>>;
+	border-radius: 4px;
+	background: <<colour background>>;
+	max-height: 200px;
+	overflow-y: auto;
+	margin-top: 2px;
+}
+.rrt-ta-option {
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 4px 8px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-size: 0.9em;
+}
+.rrt-ta-option:hover { background: <<colour tiddler-info-background>>; }
+.rrt-ta-check { color: <<colour primary>>; font-weight: bold; }
+.rrt-ta-empty { padding: 6px 8px; color: <<colour muted-foreground>>; font-size: 0.85em; }

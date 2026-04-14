@@ -1,0 +1,83 @@
+title: $:/plugins/rimir/typed/typeahead-select
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<!-- Typeahead selection for object-ref fields.
+     Caller sets via $let:
+       ta-elements    — filter string producing available option tiddler titles
+       sync-tiddler   — tiddler to store selection
+       sync-field     — field name on sync-tiddler
+       ta-selection   — "single" or "multi"
+       ta-view-field  — field to display (empty = title)
+       ta-instid      — unique instance ID for state isolation
+-->
+
+\function _ta-display(t) [<t>get<ta-view-field>!is[blank]] ~[<t>get[caption]!is[blank]] ~[<t>]
+
+<$let
+  searchTid={{{ [[$:/state/rimir/typed/ta/]addsuffix<ta-instid>] }}}
+>
+
+<!-- Search input -->
+<$edit-text tiddler=<<searchTid>> field="text" tag="input" placeholder="Type to search..." class="tc-edit-texteditor rrt-ta-input" inputAcceptActions="""
+<$list filter="[subfilter<ta-elements>search:title,caption,subtitle,abbrev{$(searchTid)$!!text}limit[1]]" variable="firstMatch">
+<%if [<ta-selection>match[multi]] %>
+<$action-listops $tiddler=<<sync-tiddler>> $field=<<sync-field>> $subfilter="+[toggle<firstMatch>]"/>
+<%else%>
+<$action-setfield $tiddler=<<sync-tiddler>> $field=<<sync-field>> $value=<<firstMatch>>/>
+<%endif%>
+</$list>
+<$action-setfield $tiddler=<<searchTid>> text=""/>
+"""/>
+
+<!-- Dropdown -->
+<$let searchText={{{ [<searchTid>get[text]] }}}>
+<%if [<searchText>!is[blank]] %>
+<div class="rrt-ta-dropdown">
+<$list filter=`[subfilter<ta-elements>search:title,caption,subtitle,abbrev{$(searchTid)$!!text}limit[15]]` variable="opt" emptyMessage="<div class='rrt-ta-empty'>No matches</div>">
+<$button class="tc-btn-invisible rrt-ta-option">
+<%if [<ta-selection>match[multi]] %>
+<$action-listops $tiddler=<<sync-tiddler>> $field=<<sync-field>> $subfilter="+[toggle<opt>]"/>
+<%else%>
+<$action-setfield $tiddler=<<sync-tiddler>> $field=<<sync-field>> $value=<<opt>>/>
+<%endif%>
+<$action-setfield $tiddler=<<searchTid>> text=""/>
+<$list filter="[<sync-tiddler>get<sync-field>enlist-input[]match<opt>limit[1]]" variable="_">
+<span class="rrt-ta-check">✓ </span>
+</$list>
+<$text text={{{ [function[_ta-display],<opt>] }}}/>
+</$button>
+</$list>
+</div>
+<%endif%>
+</$let>
+
+<!-- Selected values (below input) -->
+<%if [<ta-selection>match[multi]] %>
+<$list filter="[<sync-tiddler>get<sync-field>enlist-input[]limit[1]]" variable="_">
+<div class="rrt-ta-selected">
+<$list filter="[<sync-tiddler>get<sync-field>enlist-input[]]" variable="sel">
+<span class="rrt-ta-tag">
+<$text text={{{ [function[_ta-display],<sel>] }}}/>
+<$button class="tc-btn-invisible rrt-ta-remove">
+<$action-listops $tiddler=<<sync-tiddler>> $field=<<sync-field>> $subfilter="+[remove<sel>]"/>
+×
+</$button>
+</span>
+</$list>
+</div>
+</$list>
+<%elseif [<sync-tiddler>get<sync-field>!is[blank]] %>
+<div class="rrt-ta-selected">
+<span class="rrt-ta-tag">
+<$text text={{{ [<sync-tiddler>get<sync-field>] :map[function[_ta-display],<currentTiddler>] }}}/>
+<$button class="tc-btn-invisible rrt-ta-remove">
+<$action-setfield $tiddler=<<sync-tiddler>> $field=<<sync-field>> $value=""/>
+×
+</$button>
+</span>
+</div>
+<%endif%>
+
+</$let>
