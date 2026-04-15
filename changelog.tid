@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|v0.1.13 |2026-04-15 |Fix typeahead-select in field-editor: pass `sync-tiddler`/`sync-field` bindings so selections are actually written to the target field (previously silently no-op in typeahead mode) |
 |v0.1.12 |2026-04-14 |New typeahead-select component for object-ref fields: search input with filtered dropdown (searches title/caption/subtitle/abbrev), selected values as compact tags with × remove. Configurable via `$:/config/rimir/typed/ref-editor` (typeahead or pills); enum fields always use pills. Typeahead is the new default |
 |v0.1.11 |2026-04-13 |Fix type-chain import order so subtypes can override `rrt.fields:0()` (parent imported first, subtype last); field bar now starts with the type icon and shows `type-key: caption` on hover |
 |v0.1.10 |2026-04-10 |Fix enum import: include child enum tiddler in `$importvariables` so inherited enum options resolve correctly |

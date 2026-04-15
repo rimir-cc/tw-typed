@@ -46,6 +46,8 @@ type: text/vnd.tiddlywiki
   ta-selection={{{[function[_calculate_selection],<field-tid>]}}}
   ta-view-field={{{[{$:/config/rimir/typed/pill-display}!match[title]]}}}
   ta-instid={{{ [<target-tid>addsuffix[/]addsuffix<field-key>] }}}
+  sync-tiddler=<<target-tid>>
+  sync-field=<<field-key>>
 >
 <$transclude $tiddler="$:/plugins/rimir/typed/typeahead-select" $mode="block"/>
 </$let>
