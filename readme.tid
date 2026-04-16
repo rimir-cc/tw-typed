@@ -17,6 +17,7 @@ Type system engine for TiddlyWiki. Define schemas via tiddler fields, validate i
 * ''Inheritance'' — parent types for shared field definitions
 * ''Custom filters'' — `rrfunc` filter functions for type system queries
 * ''Inline field bar'' — compact editable field display for embedding in app views
+* ''Field summary'' — read-only compact table of all typed fields with formatted values
 * ''Filter panel'' — auto-generated filter UI from field definitions (text search, enum pills, reference pills)
 * ''Filter summary'' — compact button with active filter count badge, opens filter panel in popup
 * ''`rrt-filter` operator'' — JS filter operator for generic type-aware list filtering

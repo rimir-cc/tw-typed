@@ -1,0 +1,65 @@
+created: 20260416120000000
+modified: 20260416120000000
+title: $:/plugins/rimir/typed/field-summary
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<!-- Read-only field summary for any typed tiddler.
+     Parameters (set via $let before transcluding):
+       target-tid — the tiddler to display fields for
+     Renders a compact table of field labels and formatted values.
+     - Text fields: displayed as-is
+     - Date/datetime fields: formatted (DDth MMM YYYY)
+     - Enum fields: displayed as-is
+     - Object reference fields: resolved via pill-display config
+     Skips $title, $calculated, and blank fields.
+-->
+
+\import $:/plugins/rimir/typed/functions
+
+\procedure _summary-resolve-ref(val)
+<$list filter="[<val>enlist-input[]]" variable="_ref" counter="cnt"><%if [<cnt-first>match[no]] %>, <%endif%><$text text={{{ [<_ref>get{$:/config/rimir/typed/pill-display}!is[blank]] ~[<_ref>] }}}/></$list>
+\end
+
+<%if [<target-tid>has[rrt.type]]%>
+<$let
+  type-field="rrt.type"
+  type-key={{{[<target-tid>get[rrt.type]]}}}
+>
+<$let type-tid={{{[function[_locate-type-tiddler],<type-key>]}}}>
+<$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
+
+<table class="rrt-field-summary">
+<$list filter="[enlist<rrt.fields>]" variable="field-key">
+<$let
+  field-tid={{{[function[_locate-field-tiddler],<field-key>,<type-key>]}}}
+  field-typed={{{[<field-tid>get[typed]]}}}
+  raw-val={{{[<target-tid>get<field-key>]}}}
+>
+<%if [<field-typed>!match[$title]!match[$calculated]] [<raw-val>!is[blank]] +[count[]match[2]] %>
+<tr>
+<td class="rrt-field-summary-label"><$text text={{{[<field-tid>get[icon]]}}}/> <$text text=<<field-key>>/></td>
+<td class="rrt-field-summary-value">
+<%if [<field-typed>match[date]] %>
+<$text text={{{ [<raw-val>format:date[DDth MMM YYYY]] }}}/>
+<%elseif [<field-typed>match[datetime]] %>
+<$text text={{{ [<raw-val>format:date[DDth MMM YYYY 0hh:0mm]] }}}/>
+<%elseif [<field-typed>match[text]] [<field-typed>is[blank]] +[first[]] %>
+<$text text=<<raw-val>>/>
+<%elseif [<field-typed>prefix[enum:]] %>
+<$text text=<<raw-val>>/>
+<%else%>
+<$transclude $variable="_summary-resolve-ref" val=<<raw-val>>/>
+<%endif%>
+</td>
+</tr>
+<%endif%>
+</$let>
+</$list>
+</table>
+
+</$importvariables>
+</$let>
+</$let>
+<%endif%>

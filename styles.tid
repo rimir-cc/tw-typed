@@ -62,3 +62,22 @@ type: text/vnd.tiddlywiki
 	min-width: 14px;
 	text-align: center;
 }
+
+/* Field summary (read-only compact table) */
+.rrt-field-summary {
+	border-collapse: collapse;
+	width: 100%;
+	font-size: 0.9em;
+}
+.rrt-field-summary td {
+	padding: 2px 6px;
+	vertical-align: top;
+}
+.rrt-field-summary-label {
+	white-space: nowrap;
+	color: <<colour muted-foreground>>;
+	width: 1%;
+}
+.rrt-field-summary-value {
+	word-break: break-word;
+}
