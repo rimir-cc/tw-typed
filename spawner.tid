@@ -13,27 +13,27 @@ type: text/vnd.tiddlywiki
 \end
 
 \function _calculate_state(type-key) [[$:/state/rimir/typed/example/__new:]addsuffix<type-key>]
-\function _calculate_target-tid(type-key) [<state:inst-selection>get[text]!is[blank]]~[function[_calculate_state],<type-key>]
+\function _calculate_target-tid(type-key) [<state-inst-selection>get[text]!is[blank]]~[function[_calculate_state],<type-key>]
 
 <$importvariables filter="[[$:/plugins/rimir/typed/functions]]">
 <$let
 	type-field="rrt.type"
-	state:model-selection="$:/state/rimir/typed/overview/selected-model"
-	state:type-selection="$:/state/rimir/typed/overview/selected-type"
-	state:inst-selection="$:/state/rimir/typed/overview/selected-inst"
+	state-model-selection="$:/state/rimir/typed/overview/selected-model"
+	state-type-selection="$:/state/rimir/typed/overview/selected-type"
+	state-inst-selection="$:/state/rimir/typed/overview/selected-inst"
 >
 
 ''Model:''
-<$select tiddler=<<state:model-selection>> actions="<$action-deletetiddler $tiddler=<<state:type-selection>>/><$action-deletetiddler $tiddler=<<state:inst-selection>>/>">
+<$select tiddler=<<state-model-selection>> actions="<$action-deletetiddler $tiddler=<<state-type-selection>>/><$action-deletetiddler $tiddler=<<state-inst-selection>>/>">
 <option value="">All</option>
 <$list filter="[function[_locate_rrt],[type]sort[title]] :map[get[title]search-replace:g:regexp[/typed/types/.*$],[/typed/types/]] +[unique[]]" variable="modelPrefix">
 <option value=<<modelPrefix>>><$text text={{{ [<modelPrefix>removeprefix[$:/plugins/rimir/]removesuffix[/typed/types/]] }}}/></option>
 </$list>
 </$select>
 
-<$let modelFilter={{{ [<state:model-selection>get[text]] }}}>
+<$let modelFilter={{{ [<state-model-selection>get[text]] }}}>
 ''Type:''
-<$select tiddler=<<state:type-selection>> default='HelloThere' actions="<$action-deletetiddler $tiddler=<<state:inst-selection>>/>">
+<$select tiddler=<<state-type-selection>> default='HelloThere' actions="<$action-deletetiddler $tiddler=<<state-inst-selection>>/>">
 <%if [<modelFilter>!is[blank]] %>
 <$list filter='[function[_locate_rrt],[type]prefix<modelFilter>sort[title]]:filter[<currentTiddler>get[key]!prefix[_]]'>
 <option value=<<currentTiddler>>><$view field='key'/></option>
@@ -43,17 +43,17 @@ type: text/vnd.tiddlywiki
 <option value=<<currentTiddler>>><$view field='key'/></option>
 </$list>
 <%endif%>
-</$select> <$link to={{{[<state:type-selection>get[text]]}}}>=> type-def</$link><br>
+</$select> <$link to={{{[<state-type-selection>get[text]]}}}>=> type-def</$link><br>
 </$let>
 <$let
-	type-tid={{{[<state:type-selection>get[text]]}}}
+	type-tid={{{[<state-type-selection>get[text]]}}}
 	type-key={{{[<type-tid>get[key]]}}}
 >
 <$importvariables filter="[<type-tid>get[parent]] [<type-key>] :map[function[_locate-type-tiddler],<currentTiddler>]">
 <%if [get<type-field>match<type-key>count[]compare:integer:gt[0]]%>
 
 ''Instance:''
-<$select tiddler=<<state:inst-selection>> default=<<_marker_new>>>
+<$select tiddler=<<state-inst-selection>> default=<<_marker_new>>>
 <option value=<<_marker_new>>>**NEW**</option>
 <$list filter='[all[shadows+tiddlers]rrt.type<type-key>sort[title]]'>
 <option value=<<currentTiddler>>><$view field='caption'/></option>
@@ -65,7 +65,7 @@ type: text/vnd.tiddlywiki
 >
 <$link to=<<target-tid>>>=> target</$link><p/>
 
-<%if [<state:inst-selection>!is[tiddler]][<state:inst-selection>get[text]match<_marker_new>]%>
+<%if [<state-inst-selection>!is[tiddler]][<state-inst-selection>get[text]match<_marker_new>]%>
 <$button>Clear</$button>
 <%endif%>
 

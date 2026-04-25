@@ -3,7 +3,7 @@
     "description": "Type system engine for TiddlyWiki — schema definitions via tiddler fields",
     "name": "typed",
     "author": "rimir",
-    "version": "0.1.14",
+    "version": "0.1.15",
     "core-version": ">=5.3.0",
     "source": "https://github.com/rimir-cc/tw-typed",
     "plugin-type": "plugin",
