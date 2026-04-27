@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|v0.1.16 |2026-04-27 |Declare hard dependent `components` (used by field-editor and filter-panel) and `doc-template` as soft-dependent in plugin.info |
 |v0.1.15 |2026-04-25 |TW 5.4.0 compat: rename spawner state variables from `state:foo` to `state-foo`. TW 5.4.0 parses `<<name:value>>` as a dynamic-arg macro call (PR #9055), so colon-named variables are no longer addressable via `<<...>>` |
 |v0.1.14 |2026-04-16 |New `field-summary` component: read-only compact table of all typed fields with formatted dates, resolved references, and icon labels. Transclude with `target-tid` set via `$let` |
 |v0.1.13 |2026-04-15 |Fix typeahead-select in field-editor: pass `sync-tiddler`/`sync-field` bindings so selections are actually written to the target field (previously silently no-op in typeahead mode) |
