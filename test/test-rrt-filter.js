@@ -238,5 +238,102 @@ describe("typed: rrt-filter operator", function() {
 			// "test" is 4 chars, Task1 doesn't have "unknown-field", so empty string doesn't contain "test"
 			expect(result).toEqual([]);
 		});
+
+		// --- Field-list resolution edge cases (rrt.fields function shapes) ---
+
+		it("reads the field list from getVariableInfo.text when resultList is absent", function() {
+			// rrt.fields can be a \function returning a single-line text result instead of a
+			// multi-value list; the operator should still tokenise it on whitespace.
+			wiki.addTiddler({title: "$:/state/filter/name", text: "login"});
+			var textOnlyWidget = {
+				getVariable: function(name) {
+					if(name === "type-key") return "task";
+					return undefined;
+				},
+				getVariableInfo: function(name) {
+					if(name === "rrt.fields") {
+						return {text: "name status owner"};
+					}
+					return null;
+				}
+			};
+			var source = sourceWithTiddlers(["Task1", "Task2", "Task3"]);
+			var operator = {operand: "$:/state/filter"};
+			var result = rrtFilterModule["rrt-filter"](source, operator, {widget: textOnlyWidget, wiki: wiki});
+			expect(result).toEqual(["Task1", "Task3"]);
+		});
+
+		it("passes all titles through when rrt.fields is not defined", function() {
+			// A consumer that hasn't declared an rrt.fields function should still get a safe
+			// pass-through, not a crash or empty result.
+			var noFieldsWidget = {
+				getVariable: function(name) {
+					if(name === "type-key") return "task";
+					return undefined;
+				},
+				getVariableInfo: function() { return null; }
+			};
+			// A filter-state tiddler exists; it would normally narrow the set.
+			wiki.addTiddler({title: "$:/state/filter/name", text: "login"});
+			var source = sourceWithTiddlers(["Task1", "Task2", "Task3"]);
+			var operator = {operand: "$:/state/filter"};
+			var result = rrtFilterModule["rrt-filter"](source, operator, {widget: noFieldsWidget, wiki: wiki});
+			expect(result).toEqual(["Task1", "Task2", "Task3"]);
+		});
+
+		it("treats a filter-state tiddler without a text field as no filter", function() {
+			// UI may create the state tiddler before the user types anything (empty text).
+			wiki.addTiddler({title: "$:/state/filter/name"});
+			var source = sourceWithTiddlers(["Task1", "Task2", "Task3"]);
+			var operator = {operand: "$:/state/filter"};
+			var result = rrtFilterModule["rrt-filter"](source, operator, {widget: widget, wiki: wiki});
+			expect(result).toEqual(["Task1", "Task2", "Task3"]);
+		});
+
+		it("defaults to text type when a field tiddler has no typed field", function() {
+			// Plugin contract: missing `typed` on a field definition is treated as text.
+			wiki.addTiddler({title: "Field: Description", "rrt.type": "field", key: "description"});
+			wiki.addTiddler({title: "Task5", "rrt.type": "task", description: "Important login fix"});
+			wiki.addTiddler({title: "Task6", "rrt.type": "task", description: "Dashboard update"});
+			wiki.addTiddler({title: "$:/state/filter/description", text: "login"});
+			var descWidget = {
+				getVariable: function(name) {
+					if(name === "type-key") return "task";
+					return undefined;
+				},
+				getVariableInfo: function(name) {
+					if(name === "rrt.fields") return {resultList: ["description"]};
+					return null;
+				}
+			};
+			var source = sourceWithTiddlers(["Task5", "Task6"]);
+			var operator = {operand: "$:/state/filter"};
+			var result = rrtFilterModule["rrt-filter"](source, operator, {widget: descWidget, wiki: wiki});
+			expect(result).toEqual(["Task5"]);
+		});
+
+		it("passes all titles through for a date-typed filter (date filtering is not yet implemented)", function() {
+			// The plugin documents (see comment in rrt-filter.js) that date filters are a TODO.
+			// Until they're implemented, the contract is: date filter values are inert,
+			// not silently dropping titles.
+			wiki.addTiddler({title: "Field: DueDate", "rrt.type": "field", key: "due", typed: "date"});
+			wiki.addTiddler({title: "TaskA", "rrt.type": "task", due: "2026-05-17"});
+			wiki.addTiddler({title: "TaskB", "rrt.type": "task", due: "2026-06-01"});
+			wiki.addTiddler({title: "$:/state/filter/due", text: "2026-05-17"});
+			var dueWidget = {
+				getVariable: function(name) {
+					if(name === "type-key") return "task";
+					return undefined;
+				},
+				getVariableInfo: function(name) {
+					if(name === "rrt.fields") return {resultList: ["due"]};
+					return null;
+				}
+			};
+			var source = sourceWithTiddlers(["TaskA", "TaskB"]);
+			var operator = {operand: "$:/state/filter"};
+			var result = rrtFilterModule["rrt-filter"](source, operator, {widget: dueWidget, wiki: wiki});
+			expect(result).toEqual(["TaskA", "TaskB"]);
+		});
 	});
 });

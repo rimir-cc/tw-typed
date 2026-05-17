@@ -49,7 +49,7 @@ exports["rrt-filter"] = function(source, operator, options) {
 
 	// Resolve fields via rrt.fields function (aggregated from type + parent)
 	var fieldsStr = "";
-	var variableInfo = widget.getVariableInfo("rrt.fields", {params: [], source: function(callback) {}});
+	var variableInfo = widget.getVariableInfo("rrt.fields", {params: [], source: /* istanbul ignore next — required by the getVariableInfo signature; not invoked for value-returning functions */ function(callback) {}});
 	if(variableInfo && variableInfo.resultList) {
 		fieldsStr = variableInfo.resultList.join(" ");
 	} else if(variableInfo && variableInfo.text) {
@@ -70,6 +70,7 @@ exports["rrt-filter"] = function(source, operator, options) {
 				var typed = "text";
 				if(fieldTids.length > 0) {
 					var fieldTid = wiki.getTiddler(fieldTids[0]);
+					/* istanbul ignore else — filterTiddlers above guarantees fieldTid resolves */
 					if(fieldTid) {
 						typed = (fieldTid.fields.typed || "text").trim();
 					}
